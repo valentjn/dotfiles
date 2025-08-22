@@ -1,0 +1,34 @@
+# Copyright (C) 2025 Julian Valentin
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+[alias]
+    # amend commit other than HEAD
+    amend = "!f() { \
+        COMMIT=$(git rev-parse --short \"$1\") && \
+        git commit --fixup \"$COMMIT\" && \
+        GIT_SEQUENCE_EDITOR=true git rebase --autosquash --autostash --interactive "$COMMIT^"; \
+    }; f"
+
+    # graphical log
+    hist = log --decorate --graph --oneline
+
+    # shortcut for status
+    st = status
+
+[core]
+    # set editor to nano
+    editor = nano
+
+    # always use pager, even for short output
+    pager = LESS= less --RAW-CONTROL-CHARS
+
+[pull]
+    # rebase instead of merge when pulling
+    rebase = true
+
+[rebase]
+    # autostash when rebasing
+    autostash = true

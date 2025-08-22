@@ -1,0 +1,99 @@
+/* Copyright (C) 2025 Julian Valentin
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+{
+    // don't auto-close brackets, quotes, etc.
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingComments": "never",
+    "editor.autoClosingDelete": "never",
+    "editor.autoClosingOvertype": "never",
+    "editor.autoClosingQuotes": "never",
+
+    // hide folding margin
+    "editor.folding": false,
+
+    // hide glyph margin (breakpoints)
+    "editor.glyphMargin": false,
+
+    // make minimap smaller
+    "editor.minimap.maxColumn": 50,
+
+    // disable quick suggestions
+    "editor.quickSuggestions": {
+        "other": "off",
+        "comments": "off",
+        "strings": "off",
+    },
+
+    // set editor ruler
+    "editor.rulers": [120],
+
+    // insert final newline
+    "files.insertFinalNewline": true,
+
+    // trim trailing whitespace
+    "files.trimTrailingWhitespace": true,
+
+    // set keyboard layout to German
+    "keyboard.layout": "com.apple.keylayout.German",
+
+    // set severity of mypy issues to warning
+    "mypy-type-checker.severity": {
+        "error": "Warning",
+        "note": "Warning",
+    },
+
+    // set maximum line length for Pylint
+    "pylint.args": [
+        "--max-line-length=120",
+    ],
+
+    // set severity of Pylint issues to warning
+    "pylint.severity": {
+        "convention": "Warning",
+        "error": "Warning",
+        "fatal": "Error",
+        "info": "Warning",
+        "refactor": "Warning",
+        "warning": "Warning",
+    },
+
+    // set target Python version for Ruff
+    "ruff.configuration": {
+        "target-version": "py313",
+    },
+
+    // set maximum line length for Ruff
+    "ruff.lineLength": 120,
+
+    // enable all Ruff rules by default
+    "ruff.lint.extendSelect": [
+        "ALL",
+    ],
+
+    // disable telemetry
+    "telemetry.telemetryLevel": "off",
+
+    // disable shell integration
+    "terminal.integrated.shellIntegration.enabled": false,
+
+    // limit the number of open editors
+    "workbench.editor.limit.enabled": true,
+    "workbench.editor.limit.perEditorGroup": true,
+    "workbench.editor.limit.value": 6,
+
+    "[python]": {
+        // fix Ruff issues and sort imports on save
+        "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "always",
+            "source.organizeImports.ruff": "always",
+        },
+
+        // format Python files on save
+        "editor.formatOnSave": true,
+    },
+}
