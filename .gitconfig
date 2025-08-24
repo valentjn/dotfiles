@@ -29,6 +29,10 @@
     # rebase instead of merge when pulling
     rebase = true
 
+[push]
+    # automatically set upstream branch when pushing new branches
+    autoSetupRemote = true
+
 [rebase]
     # autostash when rebasing
     autostash = true
