@@ -8,7 +8,9 @@
 
 import argparse
 import logging
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 START_DELIMITER = "valentjn_dotfiles_start"
 END_DELIMITER = "valentjn_dotfiles_end"
@@ -22,9 +24,12 @@ def main() -> None:
     arguments = parse_arguments()
     install_text(".bashrc", dry_run=arguments.dry_run)
     install_text(".gitconfig", dry_run=arguments.dry_run)
-    install_text_directory(".local/bin", dry_run=arguments.dry_run, overwrite=True)
-    install_json(".vscode/keybindings.json", dry_run=arguments.dry_run)
-    install_json(".vscode/settings.json", dry_run=arguments.dry_run)
+    install_text_dir(".local/bin", dry_run=arguments.dry_run, overwrite=True)
+    install_in_workspaces(
+        install_json,
+        ".vscode/settings.json",
+        dry_run=arguments.dry_run,
+    )
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -39,16 +44,28 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def install_in_workspaces(
+    install: Callable[..., None],
+    *args: Any,  # noqa: ANN401
+    **kwargs: Any,  # noqa: ANN401
+) -> None:
+    """Install file in all workspaces."""
+    for workspace in sorted(Path("/workspaces").iterdir()):
+        if workspace.name != "dotfiles" and not workspace.name.startswith("."):
+            install(*args, **kwargs, target_dir=workspace)
+
+
 def install_json(
     path: Path | str,
     *,
     dry_run: bool = False,
     overwrite: bool = False,
+    target_dir: Path | str | None = None,
 ) -> None:
     """Install patch into a JSON file."""
     start_delimiter = None if overwrite else f"// {START_DELIMITER}"
     end_delimiter = None if overwrite else f"// {END_DELIMITER}"
-    source, target = get_source_and_target_paths(path)
+    source, target = get_source_and_target_paths(path, target_dir=target_dir)
     patch = source.read_text()
     start_brace, end_brace = get_braces(patch)
     string = target.read_text() if target.exists() else f"{start_brace}{end_brace}"
@@ -87,26 +104,33 @@ def install_text(
     *,
     dry_run: bool = False,
     overwrite: bool = False,
+    target_dir: Path | str | None = None,
 ) -> None:
     """Install patch into a text file (e.g., INI)."""
     start_delimiter = None if overwrite else f"# {START_DELIMITER}"
     end_delimiter = None if overwrite else f"# {END_DELIMITER}"
-    source, target = get_source_and_target_paths(path)
+    source, target = get_source_and_target_paths(path, target_dir=target_dir)
     string = target.read_text() if target.exists() else ""
     string = install_string(string, source.read_text(), start_delimiter, end_delimiter)
     write_file(source, string, target, dry_run=dry_run)
 
 
-def install_text_directory(
+def install_text_dir(
     path: Path | str,
     *,
     dry_run: bool = False,
     overwrite: bool = False,
+    target_dir: Path | str | None = None,
 ) -> None:
     """Install all text files in a directory."""
     for file in sorted(Path(path).iterdir()):
         if file.is_file():
-            install_text(file, dry_run=dry_run, overwrite=overwrite)
+            install_text(
+                file,
+                dry_run=dry_run,
+                overwrite=overwrite,
+                target_dir=target_dir,
+            )
 
 
 def install_string(
@@ -126,14 +150,19 @@ def install_string(
     return f"{string[: start_index - 1]}{patch_with_delimiters}{string[end_index + len(end_delimiter) + 1 :]}"
 
 
-def get_source_and_target_paths(path: Path | str) -> tuple[Path, Path]:
+def get_source_and_target_paths(
+    path: Path | str,
+    target_dir: Path | str | None = None,
+) -> tuple[Path, Path]:
     """Get source and target paths for a given file."""
+    if target_dir is None:
+        target_dir = Path.home()
     root = Path(__file__).parent
     path = Path(path)
     if path.is_absolute():
         path = path.relative_to(root)
     source = root / path
-    target = Path.home() / path
+    target = target_dir / path
     return source, target
 
 
