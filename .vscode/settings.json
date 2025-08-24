@@ -22,6 +22,9 @@
     // make minimap smaller
     "editor.minimap.maxColumn": 50,
 
+    // make minimap fill editor height
+    "editor.minimap.size": "fill",
+
     // disable quick suggestions
     "editor.quickSuggestions": {
         "other": "off",
