@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     """Run main function."""
-    logging.basicConfig(format="%(levelname)s %(message)s", level=logging.INFO)
+    logging.basicConfig(format="%(message)s", level=logging.INFO)
     arguments = parse_arguments()
     install_text(".bashrc", dry_run=arguments.dry_run)
     install_text(".gitconfig", dry_run=arguments.dry_run)
