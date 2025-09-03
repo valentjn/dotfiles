@@ -9,6 +9,9 @@
 import argparse
 import json
 import logging
+import os
+import subprocess
+import urllib.request
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
@@ -31,6 +34,7 @@ def main() -> None:
         ".vscode/settings.json",
         dry_run=arguments.dry_run,
     )
+    install_uv()
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -176,6 +180,15 @@ def write_file(
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(string, encoding="utf-8")
     target.chmod(source.stat().st_mode)
+
+
+def install_uv() -> None:
+    """Install uv."""
+    logger.info("installing uv")
+    url = "https://astral.sh/uv/install.sh"
+    with urllib.request.urlopen(url) as response:
+        install_script = response.read().decode("utf-8")
+    subprocess.run(["sh", "-c", install_script], check=True, env={**os.environ, "UV_PRINT_QUIET": "1"})
 
 
 if __name__ == "__main__":

@@ -8,7 +8,6 @@
 
 import argparse
 import logging
-import shutil
 import subprocess
 import sys
 
@@ -19,7 +18,6 @@ def main() -> None:
     """Run main function."""
     logging.basicConfig(format="%(levelname)s %(message)s", level=logging.INFO)
     arguments = parse_arguments()
-    install_uv()
     run_ruff_check(verbose=arguments.verbose)
     run_ruff_format(verbose=arguments.verbose)
     run_mypy(verbose=arguments.verbose)
@@ -37,13 +35,6 @@ def parse_arguments() -> argparse.Namespace:
         help="show more output",
     )
     return parser.parse_args()
-
-
-def install_uv() -> None:
-    """Install uv if not already installed."""
-    if shutil.which("uv") is None:
-        logger.info("installing uv")
-        run(["pip", "install", "--user", "uv"], log=False)
 
 
 def run_ruff_format(*, verbose: bool = False) -> None:
@@ -111,8 +102,6 @@ def run(
     """Run a command and exit if it fails."""
     if program_name is None:
         match command[0]:
-            case "pip":
-                program_name = " ".join(command[:2])
             case "uvx":
                 program_name = command[1]
             case _:
