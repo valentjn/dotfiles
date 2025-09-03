@@ -7,6 +7,7 @@
 """Install dotfiles in home directory."""
 
 import argparse
+import json
 import logging
 from collections.abc import Callable
 from pathlib import Path
@@ -63,40 +64,32 @@ def install_json(
     target_dir: Path | str | None = None,
 ) -> None:
     """Install patch into a JSON file."""
-    start_delimiter = None if overwrite else f"// {START_DELIMITER}"
-    end_delimiter = None if overwrite else f"// {END_DELIMITER}"
     source, target = get_source_and_target_paths(path, target_dir=target_dir)
     patch = source.read_text()
-    start_brace, end_brace = get_braces(patch)
-    string = target.read_text() if target.exists() else f"{start_brace}{end_brace}"
-    if (
-        start_delimiter is not None
-        and end_delimiter is not None
-        and start_delimiter not in string
-    ):
-        index = string.index(end_brace)
-        string = (
-            f"{string[:index]}\n{start_delimiter}\n{end_delimiter}\n{string[index:]}"
-        )
-    patch = patch[patch.index(start_brace) + 1 : patch.rindex(end_brace)]
-    string = install_string(string, patch, start_delimiter, end_delimiter)
-    write_file(source, string, target, dry_run=dry_run)
+    if target.exists():
+        target_str = json.dumps(merge_json(json.loads(target.read_text(), json.loads(target.read_text()))))
+    else:
+        target_str = patch
+    write_file(source, target_str, target, dry_run=dry_run)
 
 
-def get_braces(code: str) -> tuple[str, str]:
-    """Get the type of braces or brackets used in JSON code."""
-    brace_index = code.find("{")
-    bracket_index = code.find("[")
-    if brace_index == -1 and bracket_index == -1:
-        msg = "no braces or brackets found"
-        raise ValueError(msg)
-    if brace_index == -1:
-        return "[", "]"
-    if bracket_index == -1:
-        return "{", "}"
-    if brace_index < bracket_index:
-        return "{", "}"
-    return "[", "]"
+def merge_json[T](source: T, target: T) -> T:
+    """Merge two JSON arrays or objects."""
+    if isinstance(source, dict):
+        if not isinstance(target, dict):
+            msg = "cannot merge JSON objects with non-objects"
+            raise TypeError(msg)
+        result = source.copy()
+        for key, value in target.items():
+            result[key] = merge_json(source[key], value) if key in source else value
+        return result
+    if isinstance(source, list):
+        if not isinstance(target, list):
+            msg = "cannot merge JSON arrays with non-arrays"
+            raise TypeError(msg)
+        source_set = set(source)
+        return source + [item for item in target if item not in source_set]
+    return target
 
 
 def install_text(
@@ -110,9 +103,9 @@ def install_text(
     start_delimiter = None if overwrite else f"# {START_DELIMITER}"
     end_delimiter = None if overwrite else f"# {END_DELIMITER}"
     source, target = get_source_and_target_paths(path, target_dir=target_dir)
-    string = target.read_text() if target.exists() else ""
-    string = install_string(string, source.read_text(), start_delimiter, end_delimiter)
-    write_file(source, string, target, dry_run=dry_run)
+    target_str = target.read_text() if target.exists() else ""
+    target_str = install_string(source.read_text(), target_str, start_delimiter, end_delimiter)
+    write_file(source, target_str, target, dry_run=dry_run)
 
 
 def install_text_dir(
@@ -134,8 +127,8 @@ def install_text_dir(
 
 
 def install_string(
-    string: str,
     patch: str,
+    string: str,
     start_delimiter: str | None,
     end_delimiter: str | None,
 ) -> str:
