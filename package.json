@@ -1,0 +1,20 @@
+{
+    "devDependencies": {
+        "prettier": ">=3.6.2",
+        "prettier-plugin-toml": ">=2.0.6"
+    },
+    "scripts": {
+        "fmt": "npm run fmt:prettier && npm run fmt:ruff && npm run fmt:misc",
+        "fmt:check": "npx prettier --check . && uv run ruff format --diff",
+        "fmt:prettier": "npx prettier --write .",
+        "fmt:misc": "",
+        "fmt:ruff": "uv run ruff format",
+        "lint": "npm run lint:mypy && npm run lint:ruff && npm run lint:misc",
+        "lint:fix": "npm run lint:fix:ruff && npm run lint:fix:misc",
+        "lint:fix:misc": "",
+        "lint:fix:ruff": "uv run ruff check --fix",
+        "lint:misc": "",
+        "lint:mypy": "uv run mypy",
+        "lint:ruff": "uv run ruff check"
+    }
+}
