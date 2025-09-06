@@ -14,7 +14,7 @@ import subprocess
 import urllib.request
 from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 START_DELIMITER = "valentjn_dotfiles_start"
 END_DELIMITER = "valentjn_dotfiles_end"
@@ -82,16 +82,16 @@ def merge_json[T](source: T, target: T) -> T:
         if not isinstance(target, dict):
             msg = "cannot merge JSON objects with non-objects"
             raise TypeError(msg)
-        result = source.copy()
+        result = cast("T", source.copy())
         for key, value in target.items():
-            result[key] = merge_json(source[key], value) if key in source else value
+            result[key] = merge_json(source[key], value) if key in source else value  # type: ignore[index]
         return result
     if isinstance(source, list):
         if not isinstance(target, list):
             msg = "cannot merge JSON arrays with non-arrays"
             raise TypeError(msg)
         source_set = set(source)
-        return source + [item for item in target if item not in source_set]
+        return cast("T", source + [item for item in target if item not in source_set])
     return target
 
 
