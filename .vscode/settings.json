@@ -16,6 +16,9 @@
     // hide folding margin
     "editor.folding": false,
 
+    // set font to Cascadia Code
+    "editor.fontFamily": "Cascadia Code",
+
     // hide glyph margin (breakpoints)
     "editor.glyphMargin": false,
 
