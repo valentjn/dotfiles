@@ -67,12 +67,18 @@ def run_ruff_check(*, verbose: bool = False) -> None:
         "--ignore",
         ",".join(  # noqa: FLY002
             [
+                # missing-trailing-comma
+                "COM812",
                 # incorrect-blank-line-before-class
                 "D203",
                 # multi-line-summary-second-line
                 "D213",
+                # suspicious-url-open-usage
+                "S310",
                 # subprocess-without-shell-equals-true
                 "S603",
+                # start-process-with-partial-path
+                "S607",
             ],
         ),
         "--line-length",
