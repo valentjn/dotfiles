@@ -10,6 +10,7 @@ import argparse
 import json
 import logging
 import os
+import shutil
 import subprocess
 import urllib.request
 from collections.abc import Callable
@@ -183,11 +184,12 @@ def write_file(
 
 def install_uv() -> None:
     """Install uv."""
-    logger.info("installing uv")
-    url = "https://astral.sh/uv/install.sh"
-    with urllib.request.urlopen(url) as response:
-        install_script = response.read().decode("utf-8")
-    subprocess.run(["sh", "-c", install_script], check=True, env={**os.environ, "UV_PRINT_QUIET": "1"})
+    if shutil.which("uv") is None:
+        logger.info("installing uv")
+        url = "https://astral.sh/uv/install.sh"
+        with urllib.request.urlopen(url) as response:
+            install_script = response.read().decode("utf-8")
+        subprocess.run(["sh", "-c", install_script], check=True, env={**os.environ, "UV_PRINT_QUIET": "1"})
 
 
 if __name__ == "__main__":
