@@ -64,7 +64,6 @@ def install_json(
     path: Path | str,
     *,
     dry_run: bool = False,
-    overwrite: bool = False,
     target_dir: Path | str | None = None,
 ) -> None:
     """Install patch into a JSON file."""
