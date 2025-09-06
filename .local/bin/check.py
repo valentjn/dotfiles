@@ -67,9 +67,12 @@ def run_ruff_check(*, verbose: bool = False) -> None:
         "--ignore",
         ",".join(  # noqa: FLY002
             [
-                "D203",  # incorrect-blank-line-before-class
-                "D213",  # multi-line-summary-second-line
-                "S603",  # subprocess-without-shell-equals-true
+                # incorrect-blank-line-before-class
+                "D203",
+                # multi-line-summary-second-line
+                "D213",
+                # subprocess-without-shell-equals-true
+                "S603",
             ],
         ),
         "--line-length",

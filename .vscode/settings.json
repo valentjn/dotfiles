@@ -78,6 +78,15 @@
         "ALL",
     ],
 
+    "ruff.lint.ignore": [
+        // incorrect-blank-line-before-class
+        "D203",
+        // multi-line-summary-second-line
+        "D213",
+        // subprocess-without-shell-equals-true
+        "S603",
+    ],
+
     // disable telemetry
     "telemetry.telemetryLevel": "off",
 
