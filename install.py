@@ -32,11 +32,7 @@ def main() -> None:
     install_text(".bashrc", dry_run=arguments.dry_run)
     install_text(".gitconfig", dry_run=arguments.dry_run)
     install_text_dir(".local/bin", dry_run=arguments.dry_run, overwrite=True)
-    install_in_workspaces(
-        install_json,
-        ".vscode/settings.json",
-        dry_run=arguments.dry_run,
-    )
+    install_in_workspaces(install_json, ".vscode/settings.json", dry_run=arguments.dry_run)
     install_uv()
 
 
@@ -44,10 +40,7 @@ def parse_arguments() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="install dotfiles")
     parser.add_argument(
-        "-n",
-        "--dry-run",
-        action=argparse.BooleanOptionalAction,
-        help="show what would be done without making changes",
+        "-n", "--dry-run", action=argparse.BooleanOptionalAction, help="show what would be done without making changes"
     )
     return parser.parse_args()
 
@@ -63,12 +56,7 @@ def install_in_workspaces(
             install(*args, **kwargs, target_dir=workspace)
 
 
-def install_json(
-    path: Path | str,
-    *,
-    dry_run: bool = False,
-    target_dir: Path | str | None = None,
-) -> None:
+def install_json(path: Path | str, *, dry_run: bool = False, target_dir: Path | str | None = None) -> None:
     """Install patch into a JSON file."""
     source, target = get_source_and_target_paths(path, target_dir=target_dir)
     patch = read_source_file(source)
@@ -96,11 +84,7 @@ def merge_json[T](source: T, target: T) -> T:
 
 
 def install_text(
-    path: Path | str,
-    *,
-    dry_run: bool = False,
-    overwrite: bool = False,
-    target_dir: Path | str | None = None,
+    path: Path | str, *, dry_run: bool = False, overwrite: bool = False, target_dir: Path | str | None = None
 ) -> None:
     """Install patch into a text file (e.g., INI)."""
     start_delimiter = None if overwrite else f"# {START_DELIMITER}"
@@ -112,29 +96,15 @@ def install_text(
 
 
 def install_text_dir(
-    path: Path | str,
-    *,
-    dry_run: bool = False,
-    overwrite: bool = False,
-    target_dir: Path | str | None = None,
+    path: Path | str, *, dry_run: bool = False, overwrite: bool = False, target_dir: Path | str | None = None
 ) -> None:
     """Install all text files in a directory."""
     for file in sorted(Path(path).iterdir()):
         if file.is_file():
-            install_text(
-                file,
-                dry_run=dry_run,
-                overwrite=overwrite,
-                target_dir=target_dir,
-            )
+            install_text(file, dry_run=dry_run, overwrite=overwrite, target_dir=target_dir)
 
 
-def install_string(
-    patch: str,
-    string: str,
-    start_delimiter: str | None,
-    end_delimiter: str | None,
-) -> str:
+def install_string(patch: str, string: str, start_delimiter: str | None, end_delimiter: str | None) -> str:
     """Install a patch into a string with delimiters."""
     if start_delimiter is None or end_delimiter is None:
         return patch
@@ -146,10 +116,7 @@ def install_string(
     return f"{string[: start_index - 1]}{patch_with_delimiters}{string[end_index + len(end_delimiter) + 1 :]}"
 
 
-def get_source_and_target_paths(
-    path: Path | str,
-    target_dir: Path | str | None = None,
-) -> tuple[Path, Path]:
+def get_source_and_target_paths(path: Path | str, target_dir: Path | str | None = None) -> tuple[Path, Path]:
     """Get source and target paths for a given file."""
     if target_dir is None:
         target_dir = Path.home()
@@ -177,13 +144,7 @@ def read_source_file(path: Path | str) -> str:
     return "\n".join(lines) + "\n"
 
 
-def write_file(
-    source: Path | str,
-    string: str,
-    target: Path | str,
-    *,
-    dry_run: bool = False,
-) -> None:
+def write_file(source: Path | str, string: str, target: Path | str, *, dry_run: bool = False) -> None:
     """Write a string to a file."""
     source, target = Path(source), Path(target)
     if dry_run:

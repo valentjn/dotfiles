@@ -28,12 +28,7 @@ def main() -> None:
 def parse_arguments() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="check code quality")
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action=argparse.BooleanOptionalAction,
-        help="show more output",
-    )
+    parser.add_argument("-v", "--verbose", action=argparse.BooleanOptionalAction, help="show more output")
     return parser.parse_args()
 
 
