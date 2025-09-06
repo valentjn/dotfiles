@@ -92,7 +92,7 @@ def merge_json[T](source: T, target: T) -> T:
             raise TypeError(msg)
         source_set = set(source)
         return cast("T", source + [item for item in target if item not in source_set])
-    return target
+    return source
 
 
 def install_text(
