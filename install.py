@@ -70,7 +70,7 @@ def install_json(
     source, target = get_source_and_target_paths(path, target_dir=target_dir)
     patch = source.read_text()
     if target.exists():
-        target_str = json.dumps(merge_json(json.loads(target.read_text(), json.loads(target.read_text()))))
+        target_str = json.dumps(merge_json(json.loads(target.read_text()), json.loads(target.read_text())))
     else:
         target_str = patch
     write_file(source, target_str, target, dry_run=dry_run)
