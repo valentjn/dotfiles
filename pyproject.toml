@@ -1,0 +1,37 @@
+# Copyright (C) 2025 Julian Valentin
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+[project]
+name = "dotfiles"
+version = "1.0.0"
+requires-python = ">=3.13"
+# valentjn_dotfiles_ignore_start
+dependencies = [
+    "tomlkit>=0.13.3",
+]
+# valentjn_dotfiles_end_start
+
+[dependency-groups]
+dev = [
+    "mypy>=1.17.1",
+    "ruff>=0.12.11",
+]
+
+[tool.mypy]
+strict = true
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+ignore = [
+    "COM812",
+    "D203",
+    "D213",
+    "S310",
+    "S607",
+]
+select = ["ALL"]
