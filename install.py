@@ -19,6 +19,8 @@ from typing import Any, cast
 
 START_DELIMITER = "valentjn_dotfiles_start"
 END_DELIMITER = "valentjn_dotfiles_end"
+IGNORE_START_DELIMITER = "valentjn_dotfiles_ignore_start"
+IGNORE_END_DELIMITER = "valentjn_dotfiles_ignore_end"
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +71,7 @@ def install_json(
 ) -> None:
     """Install patch into a JSON file."""
     source, target = get_source_and_target_paths(path, target_dir=target_dir)
-    patch = source.read_text()
+    patch = read_source_file(source)
     target_str = json.dumps(merge_json(json.loads(patch), json.loads(target.read_text()))) if target.exists() else patch
     write_file(source, target_str, target, dry_run=dry_run)
 
@@ -105,7 +107,7 @@ def install_text(
     end_delimiter = None if overwrite else f"# {END_DELIMITER}"
     source, target = get_source_and_target_paths(path, target_dir=target_dir)
     target_str = target.read_text() if target.exists() else ""
-    target_str = install_string(source.read_text(), target_str, start_delimiter, end_delimiter)
+    target_str = install_string(read_source_file(source), target_str, start_delimiter, end_delimiter)
     write_file(source, target_str, target, dry_run=dry_run)
 
 
@@ -158,6 +160,21 @@ def get_source_and_target_paths(
     source = root / path
     target = target_dir / path
     return source, target
+
+
+def read_source_file(path: Path | str) -> str:
+    """Read a source file."""
+    string = Path(path).read_text(encoding="utf-8")
+    lines = []
+    in_ignored_section = False
+    for line in string.splitlines():
+        if IGNORE_START_DELIMITER in line:
+            in_ignored_section = True
+        if not in_ignored_section:
+            lines.append(line)
+        if IGNORE_END_DELIMITER in line:
+            in_ignored_section = False
+    return "\n".join(lines) + "\n"
 
 
 def write_file(
