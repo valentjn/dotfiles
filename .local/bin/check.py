@@ -4,7 +4,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
-"""Check code quality using mypy, Pylint, and Ruff."""
+"""Check code quality using mypy and Ruff."""
 
 import argparse
 import logging
@@ -21,7 +21,6 @@ def main() -> None:
     run_ruff_check(verbose=arguments.verbose)
     run_ruff_format(verbose=arguments.verbose)
     run_mypy(verbose=arguments.verbose)
-    run_pylint(verbose=arguments.verbose)
     logger.info("all checks passed")
 
 
@@ -86,15 +85,6 @@ def run_ruff_check(*, verbose: bool = False) -> None:
     if verbose:
         command.append("--show-files")
     run(command, program_name="ruff check")
-
-
-def run_pylint(*, verbose: bool = False) -> None:
-    """Run pylint."""
-    command = ["uvx", "pylint", "--max-line-length", "120", "--score", "n"]
-    if verbose:
-        command.append("--verbose")
-    command.append(".")
-    run(command)
 
 
 def run(

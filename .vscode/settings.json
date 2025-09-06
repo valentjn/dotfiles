@@ -53,21 +53,6 @@
         "note": "Warning",
     },
 
-    // set maximum line length for Pylint
-    "pylint.args": [
-        "--max-line-length=120",
-    ],
-
-    // set severity of Pylint issues to warning
-    "pylint.severity": {
-        "convention": "Warning",
-        "error": "Warning",
-        "fatal": "Error",
-        "info": "Warning",
-        "refactor": "Warning",
-        "warning": "Warning",
-    },
-
     // set target Python version for Ruff
     "ruff.configuration": {
         "target-version": "py313",
