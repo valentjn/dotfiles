@@ -23,7 +23,7 @@
     "editor.glyphMargin": false,
 
     // make minimap smaller
-    "editor.minimap.maxColumn": 50,
+    "editor.minimap.maxColumn": 40,
 
     // make minimap fill editor height
     "editor.minimap.size": "fill",
@@ -37,6 +37,9 @@
 
     // set editor ruler
     "editor.rulers": [120],
+
+    // enable word wrap
+    "editor.wordWrap": "on",
 
     // insert final newline
     "files.insertFinalNewline": true,
