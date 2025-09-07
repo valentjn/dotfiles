@@ -87,6 +87,9 @@
     // disable telemetry
     "telemetry.telemetryLevel": "off",
 
+    // send Ctrl+K to terminal
+    "terminal.integrated.allowChords": false,
+
     // disable shell integration
     "terminal.integrated.shellIntegration.enabled": false,
 
