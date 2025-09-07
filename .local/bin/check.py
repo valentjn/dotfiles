@@ -69,6 +69,8 @@ def run_ruff_check(*, verbose: bool = False) -> None:
                 "D213",
                 # suspicious-url-open-usage
                 "S310",
+                # suspicious-non-cryptographic-random-usage
+                "S311",
                 # subprocess-without-shell-equals-true
                 "S603",
                 # start-process-with-partial-path
