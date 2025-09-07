@@ -44,6 +44,9 @@
     // trim trailing whitespace
     "files.trimTrailingWhitespace": true,
 
+    // don't open Git repositories in parent folders of open files
+    "git.openRepositoryInParentFolders": "never",
+
     // set keyboard layout to German
     "keyboard.layout": "com.apple.keylayout.German",
 
