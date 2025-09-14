@@ -95,6 +95,9 @@
     // send Ctrl+K to terminal
     "terminal.integrated.allowChords": false,
 
+    // set terminal font to Cascadia Code
+    "terminal.integrated.fontFamily": "Cascadia Code, monospace",
+
     // disable shell integration
     "terminal.integrated.shellIntegration.enabled": false,
 
