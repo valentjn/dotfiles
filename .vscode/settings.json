@@ -98,6 +98,14 @@
     // disable shell integration
     "terminal.integrated.shellIntegration.enabled": false,
 
+    // set custom colors
+    "workbench.colorCustomizations": {
+        "editor.background": "#000000",
+        "editor.foreground": "#ffffff",
+        "terminal.background": "#000000",
+        "terminal.foreground": "#ffffff",
+    },
+
     // limit the number of open editors
     "workbench.editor.limit.enabled": true,
     "workbench.editor.limit.excludeDirty": true,
